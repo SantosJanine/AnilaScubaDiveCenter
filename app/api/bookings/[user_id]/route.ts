@@ -1,7 +1,7 @@
+export const dynamic = "force-dynamic";
+
 import { NextResponse } from 'next/server';
 import pool from '@/app/lib/mysql';
-
-export const dynamic = 'force-dynamic';
 
 export async function GET(
   req: Request,

@@ -1,9 +1,9 @@
+export const dynamic = "force-dynamic";
+
 // src\app\api\route.ts
 import { NextResponse } from 'next/server';
 
 import prisma from '@/app/lib/prisma';
-
-export const dynamic = 'force-dynamic';
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);

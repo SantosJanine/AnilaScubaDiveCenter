@@ -18,15 +18,11 @@ import useSWR from 'swr';
 
 import BlueLoading from '@/components/admin/blue-loading';
 
-function calculateDaysBetween(startDate: Date, endDate: Date) {
+function calculateDaysBetween(startDate: Date | string, endDate: Date | string) {
   const start = new Date(startDate);
   const end = new Date(endDate);
-
   const differenceInTime = end.getTime() - start.getTime();
-
-  const differenceInDays = differenceInTime / (1000 * 3600 * 24);
-
-  return Math.ceil(differenceInDays);
+  return Math.ceil(differenceInTime / (1000 * 3600 * 24));
 }
 
 export default function AdminDashboard() {
@@ -35,18 +31,13 @@ export default function AdminDashboard() {
   const fetcher = (url: string) => fetch(url).then((res) => res.json());
   const { data, error, isLoading } = useSWR('/api/dashboard', fetcher);
 
-  if (error)
+  if (error || isLoading || !data) {
     return (
       <div>
         <BlueLoading />
       </div>
     );
-  if (isLoading)
-    return (
-      <div>
-        <BlueLoading />
-      </div>
-    );
+  }
 
   return (
     <div className="container mx-auto p-6">
@@ -60,7 +51,7 @@ export default function AdminDashboard() {
             <Card>
               <CardBody>
                 <p className="text-sm font-medium text-gray-500">Total Users</p>
-                <p className="text-2xl font-bold">{data.userCount}</p>
+                <p className="text-2xl font-bold">{data?.userCount ?? 0}</p>
                 <p className="text-xs text-green-500">+20.1% from last month</p>
               </CardBody>
             </Card>
@@ -69,7 +60,7 @@ export default function AdminDashboard() {
                 <p className="text-sm font-medium text-gray-500">
                   Active Bookings
                 </p>
-                <p className="text-2xl font-bold">{data.bookingCount}</p>
+                <p className="text-2xl font-bold">{data?.bookingCount ?? 0}</p>
                 <p className="text-xs text-green-500">+15% from last week</p>
               </CardBody>
             </Card>
@@ -78,7 +69,7 @@ export default function AdminDashboard() {
                 <p className="text-sm font-medium text-gray-500">
                   Available Rooms
                 </p>
-                <p className="text-2xl font-bold">{data.roomCount}</p>
+                <p className="text-2xl font-bold">{data?.roomCount ?? 0}</p>
                 <p className="text-xs text-red-500">-5% from yesterday</p>
               </CardBody>
             </Card>
@@ -87,7 +78,7 @@ export default function AdminDashboard() {
                 <p className="text-sm font-medium text-gray-500">
                   Total Products
                 </p>
-                <p className="text-2xl font-bold">{data.productCount}</p>
+                <p className="text-2xl font-bold">{data?.productCount ?? 0}</p>
                 <p className="text-xs text-green-500">+2.5% from last month</p>
               </CardBody>
             </Card>
@@ -107,60 +98,64 @@ export default function AdminDashboard() {
                   <TableColumn>STATUS</TableColumn>
                 </TableHeader>
                 <TableBody>
-                  {data.recentBooking.map((booking: any) => (
-                    <TableRow key={booking.id}>
-                      <TableCell>{booking.fullname}</TableCell>
-                      <TableCell>{booking.room_id}</TableCell>
-                      <TableCell>
-                        {new Date(booking.created_at).toLocaleString('en-US', {
-                          month: 'short',
-                          day: 'numeric',
-                          year: 'numeric',
-                          hour: '2-digit',
-                          minute: '2-digit',
-                          second: '2-digit',
-                          hour12: true,
-                        })}
+                  {Array.isArray(data?.recentBooking) && data.recentBooking.length > 0 ? (
+                    data.recentBooking.map((booking: any) => (
+                      <TableRow key={booking.id}>
+                        <TableCell>{booking.fullname ?? '-'}</TableCell>
+                        <TableCell>{booking.room_id ?? '-'}</TableCell>
+                        <TableCell>
+                          {booking.created_at
+                            ? new Date(booking.created_at).toLocaleString('en-US', {
+                                month: 'short',
+                                day: 'numeric',
+                                year: 'numeric',
+                                hour: '2-digit',
+                                minute: '2-digit',
+                                second: '2-digit',
+                                hour12: true,
+                              })
+                            : '-'}
+                        </TableCell>
+                        <TableCell>
+                          {booking.start_date && booking.end_date ? (
+                            <>
+                              {new Date(booking.start_date).toLocaleDateString('en-US', {
+                                month: 'short',
+                                day: 'numeric',
+                                year: 'numeric',
+                              })}
+                              &nbsp;to&nbsp;
+                              {new Date(booking.end_date).toLocaleDateString('en-US', {
+                                month: 'short',
+                                day: 'numeric',
+                                year: 'numeric',
+                              })}
+                              &nbsp;-&nbsp;
+                              {calculateDaysBetween(booking.start_date, booking.end_date)}{' '}
+                              {calculateDaysBetween(booking.start_date, booking.end_date) === 1
+                                ? 'day'
+                                : 'days'}
+                            </>
+                          ) : (
+                            '-'
+                          )}
+                        </TableCell>
+                        <TableCell>{booking.status ?? '-'}</TableCell>
+                      </TableRow>
+                    ))
+                  ) : (
+                    <TableRow>
+                      <TableCell colSpan={5} className="text-center">
+                        No bookings found
                       </TableCell>
-                      <TableCell>
-                        {new Date(booking.start_date).toLocaleDateString(
-                          'en-US',
-                          {
-                            month: 'short',
-                            day: 'numeric',
-                            year: 'numeric',
-                          },
-                        )}
-                        &nbsp;to&nbsp;
-                        {new Date(booking.end_date).toLocaleDateString(
-                          'en-US',
-                          {
-                            month: 'short',
-                            day: 'numeric',
-                            year: 'numeric',
-                          },
-                        )}
-                        &nbsp;-&nbsp;
-                        {calculateDaysBetween(
-                          booking.start_date,
-                          booking.end_date,
-                        )}
-                        &nbsp;
-                        {calculateDaysBetween(
-                          booking.start_date,
-                          booking.end_date,
-                        ) === 1
-                          ? 'day'
-                          : 'days'}
-                      </TableCell>
-                      <TableCell>{booking.status}</TableCell>
                     </TableRow>
-                  ))}
+                  )}
                 </TableBody>
               </Table>
             </CardBody>
           </Card>
         </Tab>
+
         <Tab key="users" title="Users">
           <Card>
             <CardBody>

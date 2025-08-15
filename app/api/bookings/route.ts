@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 // app\api\bookings\route.ts
 import { NextResponse } from 'next/server';
 
@@ -7,8 +9,6 @@ import nodemailer from 'nodemailer';
 //   const bookings = await prisma.booking.findMany();
 //   return NextResponse.json(bookings)
 // }
-
-export const dynamic = 'force-dynamic';
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);

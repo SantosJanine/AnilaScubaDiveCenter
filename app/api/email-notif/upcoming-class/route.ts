@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import nodemailer from 'nodemailer';
 import { render } from '@react-email/render';
 

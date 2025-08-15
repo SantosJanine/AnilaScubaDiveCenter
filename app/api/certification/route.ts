@@ -1,9 +1,9 @@
+export const dynamic = "force-dynamic";
+
 // app\api\certification\route.ts
 import { NextResponse } from 'next/server';
 
 import prisma from '@/app/lib/prisma';
-
-export const dynamic = 'force-dynamic';
 
 export async function POST(request: Request) {
   const { user_id, type } = await request.json();

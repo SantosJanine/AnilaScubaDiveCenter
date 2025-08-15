@@ -1,8 +1,8 @@
+export const dynamic = "force-dynamic";
+
 import { NextResponse } from 'next/server';
 import pool from '@/app/lib/mysql';
 import nodemailer from 'nodemailer';
-
-export const dynamic = 'force-dynamic';
 
 export async function POST(req: Request) {
   try {

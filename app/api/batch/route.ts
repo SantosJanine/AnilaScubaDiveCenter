@@ -1,9 +1,10 @@
+export const dynamic = "force-dynamic";
+
 // app\api\batch\route.ts
+
 import { NextResponse } from 'next/server';
 
 import prisma from '@/app/lib/prisma';
-
-export const dynamic = 'force-dynamic';
 
 export async function POST(request: Request) {
   const { name, product_id, start_date, end_date } = await request.json();

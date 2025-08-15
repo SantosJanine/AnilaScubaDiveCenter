@@ -1,4 +1,5 @@
 // app\api\room\update\route.ts
+export const dynamic = "force-dynamic";
 import { NextResponse } from 'next/server';
 
 import prisma from '@/app/lib/prisma';

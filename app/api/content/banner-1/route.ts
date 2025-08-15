@@ -1,9 +1,9 @@
+export const dynamic = "force-dynamic";
+
 // app\api\content\announcement-banner\route.ts
 import { NextResponse } from 'next/server';
 
 import prisma from '@/app/lib/prisma';
-
-export const dynamic = 'force-dynamic';
 
 export async function GET() {
   const id = 1;

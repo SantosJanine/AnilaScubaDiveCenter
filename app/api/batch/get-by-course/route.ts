@@ -1,9 +1,9 @@
+export const dynamic = "force-dynamic";
+
 // app\api\batch\route.ts
 import { NextResponse } from 'next/server';
 
 import prisma from '@/app/lib/prisma';
-
-export const dynamic = 'force-dynamic';
 
 export async function GET() {
   const products = await prisma.product.findMany({
