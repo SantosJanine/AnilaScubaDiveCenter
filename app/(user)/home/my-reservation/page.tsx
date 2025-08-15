@@ -57,7 +57,7 @@ export default function MyReservationPage() {
 
       <div>
         <h2 className="mb-4">Room Reservations ({roomCount})</h2>
-        <RoomReservationTable data={roomData} />
+        <RoomReservationTable />
       </div>
     </div>
   );

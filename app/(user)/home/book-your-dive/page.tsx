@@ -197,9 +197,13 @@ const BookYourDivePage: React.FC = () => {
                     isRequired
                   >
                     {diveLevels.map((lvl) => (
-                      <SelectItem key={lvl.value} value={lvl.value}>
+                   <Select>
+                    {diveLevels.map((lvl) => (
+                      <SelectItem key={lvl.value}>
                         {lvl.label}
                       </SelectItem>
+                    ))}
+                  </Select>
                     ))}
                   </Select>
 

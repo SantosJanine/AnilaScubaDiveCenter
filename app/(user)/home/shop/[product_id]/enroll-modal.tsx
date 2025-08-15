@@ -131,12 +131,12 @@ export default function EnrollModal() {
                     >
                       {data.batch.map((batch: Batch) => (
                         <SelectItem
-                          key={batch.id}
-                          value={batch.id}
+                          key={batch.id.toString()}
                           isDisabled={userEnrolled || enrolledStudents.includes(userId)}
                         >
                           {`${batch.name} | ${new Intl.DateTimeFormat('en-US', { dateStyle: 'long', timeStyle: 'short' }).format(new Date(batch.start_date))} - ${new Intl.DateTimeFormat('en-US', { dateStyle: 'long', timeStyle: 'short' }).format(new Date(batch.end_date))}`}
                         </SelectItem>
+
                       ))}
                     </Select>
                   ) : (
