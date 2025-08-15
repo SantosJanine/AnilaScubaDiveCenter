@@ -188,25 +188,23 @@ const BookYourDivePage: React.FC = () => {
                     variant="underlined"
                     isRequired
                   />
-                  <Select
-                    label="Dive Level"
-                    placeholder="Select your dive level"
-                    value={level}
-                    onChange={(e) => setLevel(e.target.value)}
-                    variant="underlined"
-                    isRequired
-                  >
-                    {diveLevels.map((lvl) => (
-                   <Select>
-                    {diveLevels.map((lvl) => (
-                      <SelectItem key={lvl.value}>
-                        {lvl.label}
-                      </SelectItem>
-                    ))}
-                  </Select>
-                    ))}
-                  </Select>
-
+                            <Select
+                  label="Dive Level"
+                  placeholder="Select your dive level"
+                  selectedKeys={level ? [level] : []}
+                  onSelectionChange={(keys) => {
+                    const selected = Array.from(keys)[0] as string;
+                    setLevel(selected);
+                  }}
+                  variant="underlined"
+                  isRequired
+                >
+                  {diveLevels.map((lvl) => (
+                    <SelectItem key={lvl.value}>
+                      {lvl.label}
+                    </SelectItem>
+                  ))}
+                </Select>
                   <Textarea
                     label="Additional Message"
                     placeholder="Any special requests or information"
