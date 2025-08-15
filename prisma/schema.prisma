@@ -109,17 +109,17 @@ model testimonial {
   updated_at DateTime @default(now())
 }
 
-model User {
-  id          Int      @id @default(autoincrement())
-  first_name  String
-  last_name   String
-  email       String   @unique
-  password    String
-  avatar      String?
-  is_verified Boolean  @default(false)
-  is_archived Boolean  @default(false)
-  created_at  DateTime @default(now())
-  updated_at  DateTime @updatedAt
+model user {
+  id          Int       @id @default(autoincrement())
+  first_name  String    @db.VarChar(100)
+  last_name   String    @db.VarChar(100)
+  email       String    @db.VarChar(255)
+  password    String    @db.VarChar(255)
+  is_archived Boolean   @default(false)
+  avatar      String    @default("https://banner2.cleanpng.com/20180622/tqt/aazen4lhc.webp") @db.VarChar(255)
+  created_at  DateTime  @default(now())
+  is_verified Boolean   @default(false)
   otp_expiry  DateTime?
-  otp_pin     String?
+  otp_pin     Int?
+  updated_at  DateTime  @default(now())
 }
