@@ -113,20 +113,20 @@ const BookYourDivePage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 px-4 py-20 sm:px-6 lg:px-8 lg:pt-32">
+    <div className="min-h-screen bg-gradient-to-b from-[#D9EAFD] via-white to-[#BFDFFF] py-20 px-4 sm:px-6 lg:px-8 lg:pt-32">
       <div className="container mx-auto">
         <div className="flex flex-col items-stretch gap-8 lg:flex-row">
           <div className="flex lg:w-1/2">
-            <Card className="flex-grow">
+            <Card className="flex-grow bg-white/80 dark:bg-gray-800/80 backdrop-blur-md shadow-lg">
               <CardBody className="p-0">
                 <ImageSlider />
               </CardBody>
             </Card>
           </div>
           <div className="flex lg:w-1/2">
-            <Card className="flex-grow">
+            <Card className="flex-grow bg-white/80 dark:bg-gray-800/80 backdrop-blur-md shadow-lg">
               <CardHeader>
-                <h2 className="text-2xl font-bold text-primary">Form</h2>
+                <h2 className="text-2xl font-bold text-logo-blue">Form</h2>
               </CardHeader>
               <CardBody>
                 {error && (
@@ -188,23 +188,23 @@ const BookYourDivePage: React.FC = () => {
                     variant="underlined"
                     isRequired
                   />
-                            <Select
-                  label="Dive Level"
-                  placeholder="Select your dive level"
-                  selectedKeys={level ? [level] : []}
-                  onSelectionChange={(keys) => {
-                    const selected = Array.from(keys)[0] as string;
-                    setLevel(selected);
-                  }}
-                  variant="underlined"
-                  isRequired
-                >
-                  {diveLevels.map((lvl) => (
-                    <SelectItem key={lvl.value}>
-                      {lvl.label}
-                    </SelectItem>
-                  ))}
-                </Select>
+                  <Select
+                    label="Dive Level"
+                    placeholder="Select your dive level"
+                    selectedKeys={level ? [level] : []}
+                    onSelectionChange={(keys) => {
+                      const selected = Array.from(keys)[0] as string;
+                      setLevel(selected);
+                    }}
+                    variant="underlined"
+                    isRequired
+                  >
+                    {diveLevels.map((lvl) => (
+                      <SelectItem key={lvl.value}>
+                        {lvl.label}
+                      </SelectItem>
+                    ))}
+                  </Select>
                   <Textarea
                     label="Additional Message"
                     placeholder="Any special requests or information"

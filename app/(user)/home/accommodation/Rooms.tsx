@@ -70,70 +70,75 @@ const Rooms = () => {
   };
 
   return (
-    <div className="container mx-auto min-h-screen max-w-[90%] pb-24 pt-20 md:pt-32">
-      <div className="pl-4 pr-4">
-        <ReservationCard onDatesChange={handleDatesChange} />
-      </div>
-      <div className="grid grid-cols-1 gap-4 p-4 md:grid-cols-3">
-        {loading
-          ? Array.from({ length: 3 }).map((_, index) => <RoomCardSkeleton key={index} />)
-          : rooms.map(room => (
-              <Card key={room.id} className="flex max-h-full flex-col">
-                <CardHeader className="flex flex-col">
-                  <div className="flex w-full items-start justify-between">
-                    <div>
-                      <div className="text-xl font-bold dark:text-white">{room.title}</div>
-                      <div className="mt-2 text-sm text-neutral-500 dark:text-neutral-300">
-                        {expandedRooms[room.id] ? room.description : truncateDescription(room.description, 50)}
-                        {room.description.length > 50 && (
-                          <Button
-                            color="primary"
-                            variant="light"
-                            size="sm"
-                            className="ml-1 p-0"
-                            onClick={() => toggleDescription(room.id)}
-                          >
-                            {expandedRooms[room.id] ? 'Read less' : 'Read more'}
-                          </Button>
-                        )}
+    <div className="relative overflow-hidden bg-gradient-to-b from-[#D9EAFD] via-white to-[#BFDFFF] min-h-screen py-24">
+      <div className="container mx-auto max-w-[90%] pb-24 pt-20 md:pt-32">
+        {/* Reservation Card */}
+        <div className="pl-4 pr-4">
+          <ReservationCard onDatesChange={handleDatesChange} />
+        </div>
+
+        {/* Rooms Grid */}
+        <div className="grid grid-cols-1 gap-4 p-4 md:grid-cols-3">
+          {loading
+            ? Array.from({ length: 3 }).map((_, index) => <RoomCardSkeleton key={index} />)
+            : rooms.map(room => (
+                <Card key={room.id} className="flex max-h-full flex-col">
+                  <CardHeader className="flex flex-col">
+                    <div className="flex w-full items-start justify-between">
+                      <div>
+                        <div className="text-xl font-bold dark:text-white">{room.title}</div>
+                        <div className="mt-2 text-sm text-neutral-500 dark:text-neutral-300">
+                          {expandedRooms[room.id] ? room.description : truncateDescription(room.description, 50)}
+                          {room.description.length > 50 && (
+                            <Button
+                              color="primary"
+                              variant="light"
+                              size="sm"
+                              className="ml-1 p-0"
+                              onClick={() => toggleDescription(room.id)}
+                            >
+                              {expandedRooms[room.id] ? 'Read less' : 'Read more'}
+                            </Button>
+                          )}
+                        </div>
+                      </div>
+                      <div className="flex justify-end">
+                        <Link
+                          href={`/room/${room.id}?start=${encodeURIComponent(dates.startDate)}&end=${encodeURIComponent(dates.endDate)}`}
+                        >
+                          <Button type="button" size="sm" color="primary">Book</Button>
+                        </Link>
                       </div>
                     </div>
-                    <div className="flex justify-end">
-                      <Link
-                        href={`/room/${room.id}?start=${encodeURIComponent(dates.startDate)}&end=${encodeURIComponent(dates.endDate)}`}
-                      >
-                        <Button type="button" size="sm" color="primary">Book</Button>
-                      </Link>
-                    </div>
-                  </div>
-                </CardHeader>
-                <CardBody className="flex flex-col justify-end p-0">
-                  <button onClick={() => handleRoomImageClick(room)}>
-                    <Image
-                      isZoomed
-                      src={room.image}
-                      width={1000}
-                      height={300}
-                      className="object-cover"
-                      alt="thumbnail"
-                      radius="none"
-                    />
-                    <img
-                      src="/img/360-degrees.png"
-                      alt="360 Icon"
-                      className="absolute left-1/2 top-1/2 z-10 h-8 w-8 -translate-x-1/2 -translate-y-1/2 transform"
-                    />
-                  </button>
-                </CardBody>
-              </Card>
-            ))}
-        {selectedRoom && (
-          <RoomViewer
-            room={selectedRoom}
-            isOpen={isSignInOpen}
-            onClose={() => setIsSignInOpen(false)}
-          />
-        )}
+                  </CardHeader>
+                  <CardBody className="flex flex-col justify-end p-0 relative">
+                    <button onClick={() => handleRoomImageClick(room)}>
+                      <Image
+                        isZoomed
+                        src={room.image}
+                        width={1000}
+                        height={300}
+                        className="object-cover"
+                        alt="thumbnail"
+                        radius="none"
+                      />
+                      <img
+                        src="/img/360-degrees.png"
+                        alt="360 Icon"
+                        className="absolute left-1/2 top-1/2 z-10 h-8 w-8 -translate-x-1/2 -translate-y-1/2 transform"
+                      />
+                    </button>
+                  </CardBody>
+                </Card>
+              ))}
+          {selectedRoom && (
+            <RoomViewer
+              room={selectedRoom}
+              isOpen={isSignInOpen}
+              onClose={() => setIsSignInOpen(false)}
+            />
+          )}
+        </div>
       </div>
     </div>
   );

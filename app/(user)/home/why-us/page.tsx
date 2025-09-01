@@ -1,9 +1,7 @@
 'use client';
 
-import React, { useRef, useState } from 'react';
-import { Button, Card, CardBody, CardHeader, Divider } from "@heroui/react";
+import { useRef, useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { useRouter } from 'next/navigation';
 import {
   AnchorIcon,
   AwardIcon,
@@ -52,92 +50,76 @@ const reasons = [
   },
 ];
 
-const WhyChooseUs: React.FC = () => {
-  const router = useRouter();
-  const [isInView, setIsInView] = useState(true); // Always true for testing
+export default function WhyChooseUs() {
   const sectionRef = useRef<HTMLDivElement>(null);
+  const [isInView, setIsInView] = useState(false);
 
-  const handleClick = () => {
-    const isLoggedIn = localStorage.getItem('isLoggedIn');
-    if (isLoggedIn) {
-      router.push('/home/book-your-dive');
-    } else {
-      router.push('/account/sign-in-required');
-    }
-  };
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsInView(true);
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.2 }
+    );
+    if (sectionRef.current) observer.observe(sectionRef.current);
+    return () => observer.disconnect();
+  }, []);
 
   return (
-    <section
+    <div
       ref={sectionRef}
-      className="relative py-16 bg-gradient-to-b from-blue-50 via-white to-blue-100 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 overflow-hidden"
+      className="relative overflow-hidden bg-gradient-to-b from-[#D9EAFD] via-white to-[#BFDFFF] pt-40 pb-24"
     >
-      {/* Decorative Wave */}
-      <svg
-        className="absolute bottom-0 left-0 w-full h-40 text-blue-200 dark:text-gray-700"
-        preserveAspectRatio="none"
-        viewBox="0 0 1440 320"
-      >
-        <path
-          fill="currentColor"
-          fillOpacity="0.3"
-          d="M0,256L48,245.3C96,235,192,213,288,197.3C384,181,480,171,576,192C672,213,768,267,864,277.3C960,288,1056,256,1152,229.3C1248,203,1344,181,1392,170.7L1440,160L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"
-        ></path>
-      </svg>
-
-      <div className="relative container mx-auto px-4 z-10">
-        <h2 className="mt-12 mb-12 text-center text-4xl font-bold text-logo-blue">
+      <div className="container mx-auto px-4">
+        <motion.h2
+          initial={{ opacity: 0, y: 20 }}
+          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.8 }}
+          className="text-3xl font-bold text-center text-logo-blue mb-12 tracking-wide"
+        >
           Why Choose Anilao Scuba Dive Center?
-        </h2>
-
-        <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
-          {reasons.map((reason, index) => {
-            const Icon = reason.icon;
-            return (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-              >
-                <Card className="h-full bg-white/80 dark:bg-gray-800/80 shadow-lg transition-shadow duration-300 hover:shadow-xl backdrop-blur-md">
-                  <CardHeader className="flex gap-3 p-5">
-                    <Icon className="h-10 w-10 rounded-full bg-blue-100 p-2 dark:bg-blue-900" />
-                    <h3 className="text-xl font-semibold text-logo-blue">{reason.title}</h3>
-                  </CardHeader>
-                  <Divider />
-                  <CardBody className="p-5">
-                    <p className="text-gray-600 dark:text-gray-300">{reason.description}</p>
-                  </CardBody>
-                </Card>
-              </motion.div>
-            );
-          })}
-        </div>
+        </motion.h2>
 
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 1 }}
-          className="pt-24 text-center"
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto"
+          initial="hidden"
+          animate={isInView ? 'visible' : 'hidden'}
+          variants={{
+            visible: { transition: { staggerChildren: 0.15 } },
+            hidden: {},
+          }}
         >
-          <h3 className="mb-2 text-2xl font-semibold text-logo-blue">
-            Ready to Dive In?
-          </h3>
-          <p className="mb-4 text-gray-700 dark:text-gray-300">
-            Join us for an underwater adventure you&apos;ll never forget. Book your dive today and experience the magic of Anilao&apos;s marine life.
-          </p>
-          <Button
-            onClick={handleClick}
-            size="lg"
-            variant="solid"
-            className="font-semibold bg-logo-blue text-white"
-          >
-            Book Your Dive
-          </Button>
+          {reasons.map(({ icon: Icon, title, description }, idx) => (
+            <motion.div
+              key={idx}
+              variants={{
+                hidden: { opacity: 0, y: 40, scale: 0.95 },
+                visible: {
+                  opacity: 1,
+                  y: 0,
+                  scale: 1,
+                  transition: { duration: 0.6, type: 'spring', stiffness: 120 },
+                },
+              }}
+              className="flex flex-col items-start p-6 
+                         border-2 border-logo-blue/70 rounded-lg 
+                         hover:border-logo-blue hover:scale-105 
+                         transition-all duration-300 bg-transparent gap-4"
+            >
+              <div className="flex items-center mb-3 gap-2">
+                <span className="text-logo-blue"><Icon size={24} /></span>
+                <h3 className="text-lg font-semibold text-logo-blue">{title}</h3>
+              </div>
+              <p className="text-gray-700 text-sm leading-relaxed text-justify">
+                {description}
+              </p>
+            </motion.div>
+          ))}
         </motion.div>
       </div>
-    </section>
+    </div>
   );
-};
-
-export default WhyChooseUs;
+}

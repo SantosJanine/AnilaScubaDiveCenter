@@ -2,9 +2,8 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation'; // <-- important
-import { User, Home, BedDouble, ShoppingBag, Ellipsis } from 'lucide-react';
-import { Avatar, Button } from '@heroui/react';
+import { usePathname } from 'next/navigation';
+import { Avatar } from '@heroui/react';
 import useSWR from 'swr';
 
 import UserDropdownMenu from './user-dropdown-menu';
@@ -20,36 +19,36 @@ interface UserType {
 }
 
 const Navbar: React.FC = () => {
-  const pathname = usePathname(); // get current path
+  const pathname = usePathname();
   const [user, setUser] = useState<UserType | null>(null);
 
   const [bannerContent, setBannerContent] = useState('');
   const [bannerColor, setBannerColor] = useState('#ffffff');
   const [bannerVisible, setBannerVisible] = useState(true);
 
-  // Define links
-  const links = [
-    { href: '/home', label: 'Home', key: 'home', icon: <Home /> },
-    { href: '/home/book-your-dive', label: 'Book Your Dive', key: 'book-your-dive' },
-    { href: '/home/shop', label: 'Courses', key: 'shop', icon: <ShoppingBag /> },
-    { href: '/home/accommodation', label: 'Accommodation', key: 'accommodation', icon: <BedDouble /> },
-    { href: '/home/about-us', label: 'About Us', key: 'about-us' },
-    { href: '/home/contact-us', label: 'Contact Us', key: 'contact-us' },
-    { href: '/home/why-us', label: 'Why Us', key: 'why-us' },
-    { href: '/home/setting', label: 'Settings', key: 'setting', icon: <Ellipsis /> },
-  ];
+  // Links (removed Sign in)
+  // Links (removed Sign in)
+const links = [
+  { href: '/home/book-your-dive', label: 'BOOK YOUR DIVE', key: 'book-your-dive' },
+  { href: '/home/accommodation', label: 'ACCOMMODATION', key: 'accommodation' },
+  { href: '/home/about-us', label: 'ABOUT US', key: 'about-us' },
+  { href: '/home/contact-us', label: 'CONTACT US', key: 'contact-us' },
+  { href: '/home/why-us', label: 'WHY US', key: 'why-us' },
+  { href: '/home/shop', label: 'SERVICES', key: 'shop' } // ✅ Added Services
+];
 
-  // Determine active key based on pathname
+
+  // Determine active link
   const getActiveKey = () => {
     const found = links.find(link => pathname?.startsWith(link.href));
-    return found ? found.key : 'home';
+    return found ? found.key : pathname?.startsWith('/account/sign-in') ? 'sign-in' : '';
   };
   const activeButton = getActiveKey();
 
   // Fetch banner data
   const { data: bannerData } = useSWR('/api/content/banner-1', fetcher);
 
-  // Fetch logged-in user from MySQL via API
+  // Fetch logged-in user
   useEffect(() => {
     const email = localStorage.getItem('email');
     if (!email) return;
@@ -91,33 +90,31 @@ const Navbar: React.FC = () => {
         <div className="p-4">
           <div className="container mx-auto flex items-center justify-between">
             <div className="flex items-center">
-              <Link href="/home" className="flex items-center hover:text-blue-500">
+              <Link href="/home" className="flex items-center hover:text-[#047c9e]">
                 <Avatar src="https://wq8gj23taekk62rr.public.blob.vercel-storage.com/asdc_logo_crop_no_text.jpg" />
-                <div className="ml-2 mr-8 w-96 text-3xl font-bold text-[#047c9e] hover:text-cyan-900">
+                <div className="ml-2 mr-8 w-96 text-3xl font-bold text-[#047c9e] whitespace-nowrap truncate">
                   Anilao Scuba Dive Center
                 </div>
               </Link>
 
-              {/* Navbar Links */}
+              {/* Desktop Text Links */}
               <div className="hidden items-center justify-center space-x-8 md:flex">
-                {links
-                  .filter(link => !link.icon) // only text links
-                  .map(link => (
-                    <Link
-                      key={link.key}
-                      href={link.href}
-                      className={`font-bold ${
-                        activeButton === link.key ? 'text-blue-500' : 'text-black'
-                      } hover:text-[#047c9e]`}
-                    >
-                      {link.label}
-                    </Link>
-                  ))}
+                {links.map(link => (
+                  <Link
+                    key={link.key}
+                    href={link.href}
+                    className={`uppercase font-normal whitespace-nowrap truncate ${
+                      activeButton === link.key ? 'text-[#047c9e]' : 'text-black'
+                    } hover:text-[#047c9e]`}
+                  >
+                    {link.label}
+                  </Link>
+                ))}
               </div>
             </div>
 
-            {/* Right section */}
-            <div className="flex items-center justify-center">
+            {/* Right section (Sign in + Cart) */}
+            <div className="flex items-center space-x-6">
               {user && user.first_name && user.last_name ? (
                 <div className="flex items-center space-x-2">
                   <UserDropdownMenu />
@@ -125,9 +122,11 @@ const Navbar: React.FC = () => {
               ) : (
                 <Link
                   href="/account/sign-in"
-                  className="flex w-28 justify-end bg-transparent pr-2 text-black hover:text-blue-500"
+                  className={`uppercase font-normal whitespace-nowrap truncate ${
+                    activeButton === 'sign-in' ? 'text-[#047c9e]' : 'text-black'
+                  } hover:text-[#047c9e]`}
                 >
-                  Sign in&nbsp;&nbsp;<User />
+                  SIGN IN
                 </Link>
               )}
               <RightSidebar />
@@ -141,29 +140,10 @@ const Navbar: React.FC = () => {
         <div className="flex h-full items-center justify-center px-4">
           <Link href="/home" className="flex items-center">
             <Avatar src="https://wq8gj23taekk62rr.public.blob.vercel-storage.com/asdc_logo_crop_no_text.jpg" />
-            <div className="ml-2 text-3xl font-thin text-black">ASDC</div>
+            <div className="ml-2 text-3xl font-thin text-black whitespace-nowrap truncate">
+              ASDC
+            </div>
           </Link>
-        </div>
-      </nav>
-
-      {/* Mobile Navbar Bottom */}
-      <nav className="fixed bottom-0 z-20 block h-16 w-full border border-gray-200 bg-white sm:hidden">
-        <div className="grid h-full grid-cols-4">
-          {links
-            .filter(link => link.icon) // only icon links
-            .map(link => (
-              <Button
-                key={link.key}
-                as={Link}
-                href={link.href}
-                radius="none"
-                isIconOnly
-                variant="light"
-                className={`h-full w-full ${activeButton === link.key ? 'text-blue-500' : 'text-gray-600'}`}
-              >
-                {link.icon}
-              </Button>
-            ))}
         </div>
       </nav>
     </div>

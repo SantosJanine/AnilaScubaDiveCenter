@@ -51,43 +51,29 @@ export default function AboutUs() {
   ]
 
   return (
-    <div className="relative overflow-hidden bg-gradient-to-b from-blue-50 via-white to-blue-100 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 py-16">
+    <div className="relative min-h-screen bg-gradient-to-b from-[#D9EAFD] via-white to-[#BFDFFF] py-20 px-4 sm:px-6 lg:px-8 lg:pt-32 overflow-hidden">
       
       {/* Navbar at Top */}
-<div className="fixed top-0 left-0 w-full z-50 bg-white/80 dark:bg-gray-900/80 backdrop-blur-md shadow-md">
-  <Navbar />
-</div>
+      <div className="fixed top-0 left-0 w-full z-50 bg-white/80 dark:bg-gray-900/80 backdrop-blur-md shadow-md">
+        <Navbar />
+      </div>
 
-{/* Spacer para hindi matabunan ng Navbar */}
-<div className="h-24"></div>
+      {/* Spacer para hindi matabunan ng Navbar */}
+      <div className=""></div>
 
-
-      {/* Decorative Wave */}
-      <svg
-        className="absolute bottom-0 left-0 w-full h-40 text-blue-200 dark:text-gray-700"
-        preserveAspectRatio="none"
-        viewBox="0 0 1440 320"
-      >
-        <path
-          fill="currentColor"
-          fillOpacity="0.3"
-          d="M0,256L48,245.3C96,235,192,213,288,197.3C384,181,480,171,576,192C672,213,768,267,864,277.3C960,288,1056,256,1152,229.3C1248,203,1344,181,1392,170.7L1440,160L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"
-        ></path>
-      </svg>
-
-      <div ref={sectionRef} className="relative container mx-auto px-4 z-10">
+      <div ref={sectionRef} className="relative container mx-auto z-10">
         
         {/* Hero Section */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.8 }}
-          className="mt-12 mb-12 text-center"
+          className="mt-4 mb-8 text-center"
         >
-          <h2 className="text-4xl font-bold text-logo-blue dark:text-blue-100 mb-4">
+          <h2 className="text-4xl font-bold text-logo-blue dark:text-blue-100 mb-2">
             Discover Anilao Scuba Dive Center
           </h2>
-          <p className="text-xl text-gray-700 dark:text-gray-300">
+          <p className="text-lg md:text-xl text-gray-700 dark:text-gray-300">
             Dive into the vibrant underwater world and explore the beauty of the Philippines
           </p>
         </motion.div>

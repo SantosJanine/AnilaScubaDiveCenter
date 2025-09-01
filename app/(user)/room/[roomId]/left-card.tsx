@@ -13,7 +13,6 @@ interface LeftCardProps {
 const LeftCard: React.FC<LeftCardProps> = ({ title, description, image }) => {
   const handleShare = () => {
     const shareableLink = window.location.href;
-
     navigator.clipboard.writeText(shareableLink);
   };
 
